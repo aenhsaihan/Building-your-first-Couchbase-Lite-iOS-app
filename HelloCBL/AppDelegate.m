@@ -203,6 +203,21 @@
     return YES;
 }
 // deletes the document
-- (BOOL) deleteTheDocument {return YES;}
+- (BOOL) deleteTheDocument {
+    
+    NSError *error;
+    
+    // retrieve the document from the database and then delete it
+    if (![[_database documentWithID:_docID] deleteDocument:&error]) {
+        NSLog(@"Cannot delete document. Error message: %@", error.localizedDescription);
+    }
+    
+    // verify the deletion by retrieving the document and
+    // checking whether it has been deleted
+    CBLDocument *ddoc = [_database documentWithID:_docID];
+    NSLog(@"The document the ID %@ is %@", _docID, ([ddoc isDeleted] ? @"deleted" : @"not deleted"));
+    
+    return YES;
+}
 
 @end
