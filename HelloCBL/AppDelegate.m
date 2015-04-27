@@ -165,7 +165,16 @@
     return YES;
 }
 // retrieves the document
-- (BOOL) retrieveTheDocument {return YES;}
+- (BOOL) retrieveTheDocument {
+    
+    // retrieve the document from the database
+    CBLDocument *retrievedDoc = [_database documentWithID:_docID];
+    
+    // display the retrieved document
+    NSLog(@"The retrieved document contains: %@", retrievedDoc.properties);
+    
+    return YES;
+}
 // updates the document
 - (BOOL) updateTheDocument {return YES;}
 // deletes the document
