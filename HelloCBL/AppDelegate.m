@@ -135,7 +135,35 @@
 }
 #pragma mark CRUD Methods
 // creates the document
-- (BOOL) createTheDocument {return YES;}
+- (BOOL) createTheDocument {
+    
+    NSError *error;
+    
+    // create an object that contains data for the new document
+    NSDictionary *myDictionary = @{@"message" : @"Hello Couchbase Lite!",
+                                   @"name" : @"Joey",
+                                   @"age" : @15,
+                                   @"timestamp" : [[NSDate date] description]};
+    
+    // display the data for the new document
+    NSLog(@"This is the data for the document: %@", myDictionary);
+    
+    // create an empty document
+    CBLDocument *doc = [_database createDocument];
+    
+    // save the ID of the new document
+    _docID = doc.documentID;
+    
+    // write the document to the database
+    CBLRevision *newRevision =  [doc putProperties:myDictionary error:&error];
+    if (!newRevision) {
+        NSLog(@"Cannot write document to database. Error message: %@", error.localizedDescription);
+        return NO;
+    }
+    
+    NSLog(@"Document created and written to database. ID = %@", _docID);
+    return YES;
+}
 // retrieves the document
 - (BOOL) retrieveTheDocument {return YES;}
 // updates the document
