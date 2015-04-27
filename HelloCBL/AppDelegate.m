@@ -176,7 +176,32 @@
     return YES;
 }
 // updates the document
-- (BOOL) updateTheDocument {return YES;}
+- (BOOL) updateTheDocument {
+    
+    NSError *error;
+    
+    // retrieve the document from the database
+    CBLDocument *retrievedDoc = [_database documentWithID:_docID];
+    // make a mutable copy of the properties from the document we just retrieved
+    NSMutableDictionary *docContent = [retrievedDoc.properties mutableCopy];
+    
+    // modify the document properties
+    [docContent setObject:@"Good Morning Couchbase Lite!!!" forKey:@"message"];
+    [docContent setObject:@"breakfast" forKey:@"meal"];
+    [docContent setObject:@"Green eggs and ham" forKey:@"entree"];
+    [docContent setObject:@"burnt" forKey:@"toast"];
+    
+    // write the updated document to the database
+    CBLSavedRevision *newRev = [retrievedDoc putProperties:docContent error:&error];
+    if (!newRev) {
+        NSLog(@"Cannot update document. Error message: %@", error.localizedDescription);
+    }
+    
+    // display the new revision of the document
+    NSLog(@"The new revision of the document contains: %@", newRev.properties);
+    
+    return YES;
+}
 // deletes the document
 - (BOOL) deleteTheDocument {return YES;}
 
